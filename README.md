@@ -17,5 +17,6 @@ Use the Flight Search and Sheety API to populate your own copy of the Google She
 Use the Flight Search API to check for the cheapest flights from tomorrow to 6 months later for all the cities in the Google Sheet.
 
 If the price is lower than the lowest price listed in the Google Sheet then send a SMS to your own number with the Twilio API.
+- Use smptlib to send email instead
 
 The SMS should include the departure airport IATA code, destination airport IATA code, departure city, destination city, flight price and flight dates. e.g.
