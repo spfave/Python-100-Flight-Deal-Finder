@@ -15,7 +15,8 @@ auth_flight_data = (os.getenv("SHEETY_AUTH_USERNAME"), os.getenv("SHEETY_AUTH_PA
 
 # Classes
 class DataManager:
-    """ This class is responsible for talking to the Google Sheet. """
+    """ This class is responsible for talking to the Google Flight Deals Sheet. """
+
     def __init__(self):
         self.destinations = self.get_destination_data()
         self.flight_search = FlightSearch()
@@ -27,6 +28,10 @@ class DataManager:
         return response.json()["prices"]
 
     def check_destination_codes(self):
+        """ Evaluate if destination (city) IATA code is empty string. 
+            If so populate with city IATA code and update in spreadsheet data
+        """
+
         for destination in self.destinations:
             if destination["iataCode"] == "":
                 city_code = self.flight_search.query_city_code(destination["city"])
