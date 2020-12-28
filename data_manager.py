@@ -32,8 +32,17 @@ class DataManager:
                 city_code = self.flight_search.query_city_code(destination["city"])
                 destination["iataCode"] = city_code
 
-    def update_destination_code(self):
-        pass
+                self.update_destination_code(destination)
+
+    def update_destination_code(self, destination):
+        destination_row = f"{URL_FLIGHT_DATA}/{destination['id']}"
+        destination_data = {
+            "price":{
+                "iataCode": destination["iataCode"],
+            },
+        }
+        response = requests.put(url=destination_row, json=destination_data, auth=auth_flight_data)
+        response.raise_for_status()
 
     def update_destination_price(self):
         pass
