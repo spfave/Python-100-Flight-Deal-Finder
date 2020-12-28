@@ -1,6 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
+from flight_search import FlightSearch
 load_dotenv()
 
 
@@ -16,13 +17,20 @@ auth_flight_data = (os.getenv("SHEETY_AUTH_USERNAME"), os.getenv("SHEETY_AUTH_PA
 class DataManager:
     """ This class is responsible for talking to the Google Sheet. """
     def __init__(self):
-        pass
+        self.destinations = self.get_destination_data()
+        self.flight_search = FlightSearch()
 
     def get_destination_data(self):
         response = requests.get(url=URL_FLIGHT_DATA, auth=auth_flight_data)
         response.raise_for_status()
 
         return response.json()["prices"]
+
+    def check_destination_codes(self):
+        for destination in self.destinations:
+            if destination["iataCode"] == "":
+                city_code = self.flight_search.query_city_code(destination["city"])
+                destination["iataCode"] = city_code
 
     def update_destination_code(self):
         pass
