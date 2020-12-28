@@ -5,8 +5,8 @@ class FlightData:
     """ This class is responsible for structuring the flight data. """
 
     def __init__(self, departure_loc, arrival_loc, **kwargs):
-        self.required_params(self, departure_loc, arrival_loc, **kwargs)
-        self.optional_params(self, **kwargs)
+        self.required_params(departure_loc, arrival_loc, **kwargs)
+        self.optional_params(**kwargs)
 
     def required_params(self, departure_loc, arrival_loc, **kwargs):
         date_travel_start = kwargs.get("date_travel_start", date.today()+timedelta(days=1))
@@ -27,3 +27,9 @@ class FlightData:
             self.flight_params["curr"] = kwargs.get("currency") 
         if "price_max" in kwargs:
             self.flight_params["price_to"] = kwargs.get("price_max")
+
+
+# Main
+if __name__ == "__main__":
+    fd = FlightData("WAS", "PAR")
+    print(fd.flight_params)            
