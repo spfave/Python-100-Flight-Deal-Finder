@@ -14,7 +14,7 @@ auth_flight_data = (os.getenv("SHEETY_AUTH_USERNAME"), os.getenv("SHEETY_AUTH_PA
 
 # Classes
 class DataManager:
-    #This class is responsible for talking to the Google Sheet.
+    """ This class is responsible for talking to the Google Sheet. """
     def __init__(self):
         pass
 
@@ -22,7 +22,10 @@ class DataManager:
         response = requests.get(url=URL_FLIGHT_DATA, auth=auth_flight_data)
         response.raise_for_status()
 
-        return response.json()
+        return response.json()["prices"]
+
+    def update_destination_code(self):
+        pass
 
     def update_destination_price(self):
         pass

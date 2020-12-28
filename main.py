@@ -6,5 +6,5 @@ from pprint import pprint
 # Main
 flight_data = DataManager()
 
-flight_destination_data = flight_data.get_destination_data()["prices"]
+flight_destination_data = flight_data.get_destination_data()
 pprint(flight_destination_data)
