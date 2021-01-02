@@ -63,9 +63,10 @@ class DataManager:
                              currency="USD")
             flight = self.flight_search.query_flight(fq.flight_params)
             flight_data = FlightData(flight)
+
             if flight_data.price <= destination["maxPrice"]:
-                print(
-                    f"send alert: {flight_data.destination_city} ${flight_data.price}")
+                flight_notification = NotificationManager(flight_data)
+                flight_notification.send_flight_price_email()
 
 
 # Main

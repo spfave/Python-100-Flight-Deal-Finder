@@ -1,9 +1,12 @@
 {
     "cSpell.words": [
         "SHEETY",
+        "addrs",
         "bluf",
+        "curr",
         "dotenv",
         "getenv",
+        "gmail",
         "smtplib"
     ]
 }
