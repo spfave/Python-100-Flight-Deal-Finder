@@ -2,15 +2,19 @@ import os
 import requests
 from dotenv import load_dotenv
 from flight_search import FlightSearch
+from flight_data import FlightQuery, FlightData
+from notification_manager import NotificationManager
 load_dotenv()
 
 
 # Constants
 URL_FLIGHT_DATA = "https://api.sheety.co/e9eba1a41cbfb57732df73805f81e577/flightDeals/prices"
+DEPARTURE_CITY = "WAS"
 
 
 # Variables
-auth_flight_data = (os.getenv("SHEETY_AUTH_USERNAME"), os.getenv("SHEETY_AUTH_PASSWORD"))
+auth_flight_data = (os.getenv("SHEETY_AUTH_USERNAME"),
+                    os.getenv("SHEETY_AUTH_PASSWORD"))
 
 
 # Classes
@@ -34,7 +38,8 @@ class DataManager:
 
         for destination in self.destinations:
             if destination["iataCode"] == "":
-                city_code = self.flight_search.query_city_code(destination["city"])
+                city_code = self.flight_search.query_city_code(
+                    destination["city"])
                 destination["iataCode"] = city_code
 
                 self.update_destination_code(destination)
@@ -42,15 +47,25 @@ class DataManager:
     def update_destination_code(self, destination):
         destination_row = f"{URL_FLIGHT_DATA}/{destination['id']}"
         destination_data = {
-            "price":{
+            "price": {
                 "iataCode": destination["iataCode"],
             },
         }
-        response = requests.put(url=destination_row, json=destination_data, auth=auth_flight_data)
+        response = requests.put(url=destination_row,
+                                json=destination_data, auth=auth_flight_data)
         response.raise_for_status()
 
-    def update_destination_price(self):
-        pass
+    def check_destination_prices(self):
+        for destination in self.destinations:
+            fq = FlightQuery(departure_loc=DEPARTURE_CITY,
+                             arrival_loc=destination["iataCode"],
+                             nights_min=7, nights_max=28,
+                             currency="USD")
+            flight = self.flight_search.query_flight(fq.flight_params)
+            flight_data = FlightData(flight)
+            if flight_data.price <= destination["maxPrice"]:
+                print(
+                    f"send alert: {flight_data.destination_city} ${flight_data.price}")
 
 
 # Main
