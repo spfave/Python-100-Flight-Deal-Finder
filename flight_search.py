@@ -52,5 +52,6 @@ if __name__ == "__main__":
                      nights_min=7, nights_max=28,
                      currency="USD", flight_type="round")
     data = fs.query_flight(fq.flight_params)
+    pprint(data)
     fd = FlightData(data)
     pprint(fd.__dict__)

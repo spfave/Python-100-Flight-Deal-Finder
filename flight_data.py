@@ -17,8 +17,7 @@ class FlightData:
 
         self.departure_date = flight_data["route"][0][
             "local_departure"].split("T")
-        self.return_date = flight_data["route"][int(len(
-            flight_data["routes"])/2)]["local_departure"].split("T")
+        self.return_date = flight_data["route"][-1]["local_arrival"].split("T")
 
         self.price = flight_data["price"]
 
