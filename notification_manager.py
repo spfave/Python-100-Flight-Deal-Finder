@@ -16,7 +16,7 @@ class NotificationManager:
         fd = self.flight_data
 
         bluf = "Low price flight alert!"
-        main = f"Fly to {fd.destination_city}-{fd.destination_airport} from {fd.departure_city}-{fd.departure_airport} for only {fd.price} from {fd.departure_date[0]} to {fd.return_date[0]}"
+        main = f"Fly to {fd.destination_city}-{fd.destination_airport} from {fd.departure_city}-{fd.departure_airport} for only ${fd.price} from {fd.departure_date[0]} to {fd.return_date[0]}"
 
         self.message = f"{bluf}\n{main}"
 

@@ -1,8 +1,7 @@
 from datetime import date, timedelta
 
+
 # Classes
-
-
 class FlightData:
     """ This class is responsible for structuring the flight data. """
 
@@ -12,20 +11,20 @@ class FlightData:
     def process_data(self, flight_data):
         self.departure_city = flight_data["cityFrom"]
         self.destination_city = flight_data["cityTo"]
-        # self.destination_city_code = flight_data["cityCodeTo"]
 
         self.departure_airport = flight_data["flyFrom"]
         self.destination_airport = flight_data["flyTo"]
 
         self.departure_date = flight_data["route"][0][
             "local_departure"].split("T")
-        self.return_date = flight_data["route"][len(
-            flight_data["routes"][0])]["local_departure"].split("T")
+        self.return_date = flight_data["route"][int(len(
+            flight_data["routes"])/2)]["local_departure"].split("T")
 
         self.price = flight_data["price"]
 
 
 class FlightQuery:
+    """ This class is responsible for structuring the flight query data. """
 
     def __init__(self, departure_loc, arrival_loc, **kwargs):
         self.required_params(departure_loc, arrival_loc, **kwargs)
