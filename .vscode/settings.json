@@ -1,6 +1,8 @@
 {
     "cSpell.words": [
+        "bluf",
         "dotenv",
-        "getenv"
+        "getenv",
+        "smtplib"
     ]
 }
