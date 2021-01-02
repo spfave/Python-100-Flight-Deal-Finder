@@ -47,7 +47,6 @@ class FlightSearch:
 
 # Main
 if __name__ == "__main__":
-    # pass
     fs = FlightSearch()
     fq = FlightQuery(DEPARTURE_CITY, "PAR",
                      nights_min=7, nights_max=28,
