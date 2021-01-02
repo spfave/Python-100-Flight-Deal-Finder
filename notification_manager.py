@@ -9,7 +9,7 @@ load_dotenv()
 class NotificationManager:
     """ This class is responsible for sending notifications with the deal flight details. """
 
-    def _init__(self, flight_data: FlightData):
+    def __init__(self, flight_data: FlightData):
         self.flight_data = flight_data
 
     def generate_flight_price_alert_message(self):
@@ -21,15 +21,17 @@ class NotificationManager:
         self.message = f"{bluf}\n{main}"
 
     def send_flight_price_email(self):
+        self.generate_flight_price_alert_message()
+
         (bluf, body) = self.message.split("\n", 1)
         email_msg = f"Subject: {bluf}\n\n{body}".encode("utf-8")
 
-        with smtplib.SMTP("smtp.gmail.com") as connection:
+        with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
             connection.starttls()
             connection.login(user=os.getenv("MY_EMAIL"),
                              password=os.getenv("EMAIL_PASSWORD"))
             connection.sendmail(
                 from_addr=os.getenv("MY_EMAIL"),
-                to_addrs=os.os.getenv("TO_EMAIL"),
+                to_addrs=os.getenv("TO_EMAIL"),
                 msg=email_msg
             )
