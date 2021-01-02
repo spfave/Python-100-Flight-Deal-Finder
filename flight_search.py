@@ -1,11 +1,8 @@
 import os
 import requests
 from dotenv import load_dotenv
-from datetime import date, timedelta
-from flight_data import FlightQuery
+from flight_data import FlightData, FlightQuery
 from pprint import pprint
-
-from requests.models import Response
 load_dotenv()
 
 
@@ -45,13 +42,16 @@ class FlightSearch:
             url=kiwi_search, params=flight_search_params, headers=self.headers)
         response.raise_for_status()
 
-        return response.json()
+        return response.json()["data"][0]
 
 
 # Main
 if __name__ == "__main__":
     # pass
     fs = FlightSearch()
-    fq = FlightQuery(DEPARTURE_CITY, "PAR", currency="USD")
+    fq = FlightQuery(DEPARTURE_CITY, "PAR",
+                     nights_min=7, nights_max=28,
+                     currency="USD", flight_type="round")
     data = fs.query_flight(fq.flight_params)
-    pprint(data)
+    fd = FlightData(data)
+    pprint(fd.__dict__)

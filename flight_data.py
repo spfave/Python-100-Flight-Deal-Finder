@@ -5,7 +5,24 @@ from datetime import date, timedelta
 
 class FlightData:
     """ This class is responsible for structuring the flight data. """
-    pass
+
+    def __init__(self, flight_data):
+        self.process_data(flight_data)
+
+    def process_data(self, flight_data):
+        self.departure_city = flight_data["cityFrom"]
+        self.destination_city = flight_data["cityTo"]
+        # self.destination_city_code = flight_data["cityCodeTo"]
+
+        self.departure_airport = flight_data["flyFrom"]
+        self.destination_airport = flight_data["flyTo"]
+
+        self.departure_date = flight_data["route"][0][
+            "local_departure"].split("T")
+        self.return_date = flight_data["route"][len(
+            flight_data["routes"][0])]["local_departure"].split("T")
+
+        self.price = flight_data["price"]
 
 
 class FlightQuery:
@@ -35,6 +52,10 @@ class FlightQuery:
             self.flight_params["curr"] = kwargs.get("currency")
         if "price_max" in kwargs:
             self.flight_params["price_to"] = kwargs.get("price_max")
+        if "flight_type" in kwargs:
+            self.flight_params["flight_type"] = kwargs.get("flight_type")
+        if "one_per_date" in kwargs:
+            self.flight_params["one_per_date"] = kwargs.get("one_per_date")
 
 
 # Main
