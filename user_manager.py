@@ -6,10 +6,7 @@ load_dotenv()
 
 # Constants
 URL_USERS_DATA = os.getenv("URL_USER_DATA")
-
-
-# Variables
-auth_flight_data = (os.getenv("SHEETY_AUTH_USERNAME"),
+AUTH_FLIGHT_DATA = (os.getenv("SHEETY_AUTH_USERNAME"),
                     os.getenv("SHEETY_AUTH_PASSWORD"))
 
 
@@ -53,11 +50,20 @@ class UserManager():
             }
         }
         response = requests.post(
-            url=URL_USERS_DATA, json=user_data, auth=auth_flight_data)
+            url=URL_USERS_DATA, json=user_data, auth=AUTH_FLIGHT_DATA)
         response.raise_for_status()
+
+    def get_user_data(self):
+        response = requests.get(url=URL_USERS_DATA, auth=AUTH_FLIGHT_DATA)
+        response.raise_for_status()
+
+        return response.json()["users"]
 
 
 # Main
 if __name__ == "__main__":
+    from pprint import pprint
+
     um = UserManager()
-    um.new_user()
+    # um.new_user()
+    pprint(um.get_user_data())
