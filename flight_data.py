@@ -7,6 +7,7 @@ class FlightData:
 
     def __init__(self, flight_data):
         self.process_data(flight_data)
+        self.process_route(flight_data)
 
     def process_data(self, flight_data):
         self.departure_city = flight_data["cityFrom"]
@@ -20,6 +21,27 @@ class FlightData:
         self.return_date = flight_data["route"][-1]["local_arrival"].split("T")
 
         self.price = flight_data["price"]
+
+    def process_route(self, flight_data):
+        self.route_to = []
+        self.route_from = []
+
+        route = self.route_to
+        for flight in flight_data["route"]:
+            start = flight["cityFrom"]
+            end = flight["cityTo"]
+
+            if start == self.departure_city or start == self.destination_city:
+                route.append(start)
+
+            if end == self.destination_city:
+                route.append(end)
+                route = self.route_from
+            else:
+                route.append(end)
+
+        self.num_flights_to = len(self.route_to)-1
+        self.num_flights_from = len(self.route_from)-1
 
 
 class FlightQuery:
