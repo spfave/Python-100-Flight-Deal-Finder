@@ -1,6 +1,7 @@
 from flight_data import FlightData
 import os
 import smtplib
+from user_manager import UserManager
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -9,11 +10,15 @@ load_dotenv()
 class NotificationManager:
     """ This class is responsible for sending notifications with the deal flight details. """
 
-    def __init__(self, flight_data: FlightData):
-        self.flight_data = flight_data
+    def __init__(self):
+        pass
 
-    def generate_flight_price_alert_message(self):
-        fd = self.flight_data
+    def send_flight_price_email(self, flight_data):
+        message = self.generate_flight_price_alert_message(flight_data)
+        self.send_email(message)
+
+    def generate_flight_price_alert_message(self, flight_data: FlightData):
+        fd = flight_data
 
         bluf = f"Low price flight alert for {fd.destination_city}!"
         main = f"Fly to {fd.destination_city}-{fd.destination_airport} from {fd.departure_city}-{fd.departure_airport} for only ${fd.price}. Travel dates are from {fd.departure_date[0]} to {fd.return_date[0]}. "
@@ -23,12 +28,13 @@ class NotificationManager:
         elif fd.num_flights_to > 2:
             main += f"Outbound flight has {fd.num_flights_to-1} layovers in {', '.join(fd.route_to[1:-3])} and {fd.route_to[-2]}"
 
-        self.message = f"{bluf}\n{main}"
+        url_google_flights = "https://www.google.co.uk/flights?hl=en#flt="
+        flight_link = f"{url_google_flights}{fd.departure_airport}.{fd.destination_airport}.{fd.departure_date}*{fd.destination_airport}.{fd.departure_airport}.{fd.return_date}"
 
-    def send_flight_price_email(self):
-        self.generate_flight_price_alert_message()
+        return f"{bluf}\n{main}\n\n{flight_link}"
 
-        (bluf, body) = self.message.split("\n", 1)
+    def send_email(self, message):
+        (bluf, body) = message.split("\n", 1)
         email_msg = f"Subject: {bluf}\n\n{body}".encode("utf-8")
 
         with smtplib.SMTP("smtp.gmail.com", port=587) as connection:
