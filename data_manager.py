@@ -4,18 +4,14 @@ from dotenv import load_dotenv
 from flight_search import FlightSearch
 from flight_data import FlightQuery, FlightData
 from notification_manager import NotificationManager
-from pprint import pprint
 load_dotenv()
 
 
 # Constants
 URL_FLIGHT_DATA = os.getenv("URL_FLIGHT_DATA")
-DEPARTURE_CITY = "WAS"
-
-
-# Variables
-auth_flight_data = (os.getenv("SHEETY_AUTH_USERNAME"),
+AUTH_FLIGHT_DATA = (os.getenv("SHEETY_AUTH_USERNAME"),
                     os.getenv("SHEETY_AUTH_PASSWORD"))
+DEPARTURE_CITY = "WAS"
 
 
 # Classes
@@ -26,8 +22,9 @@ class DataManager:
         self.destinations = self.get_destination_data()
         self.flight_search = FlightSearch()
 
-    def get_destination_data(self):
-        response = requests.get(url=URL_FLIGHT_DATA, auth=auth_flight_data)
+    @staticmethod
+    def get_destination_data():
+        response = requests.get(url=URL_FLIGHT_DATA, auth=AUTH_FLIGHT_DATA)
         response.raise_for_status()
 
         return response.json()["prices"]
@@ -53,7 +50,7 @@ class DataManager:
             },
         }
         response = requests.put(url=destination_row,
-                                json=destination_data, auth=auth_flight_data)
+                                json=destination_data, auth=AUTH_FLIGHT_DATA)
         response.raise_for_status()
 
     def check_destination_prices(self):
@@ -84,7 +81,8 @@ class DataManager:
 
 # Main
 if __name__ == "__main__":
-    # pass
+    from pprint import pprint
+
     dm = DataManager()
     # pprint(dm.destinations)
 
