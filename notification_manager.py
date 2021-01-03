@@ -15,8 +15,13 @@ class NotificationManager:
     def generate_flight_price_alert_message(self):
         fd = self.flight_data
 
-        bluf = "Low price flight alert!"
-        main = f"Fly to {fd.destination_city}-{fd.destination_airport} from {fd.departure_city}-{fd.departure_airport} for only ${fd.price} from {fd.departure_date[0]} to {fd.return_date[0]}"
+        bluf = f"Low price flight alert for {fd.destination_city}!"
+        main = f"Fly to {fd.destination_city}-{fd.destination_airport} from {fd.departure_city}-{fd.departure_airport} for only ${fd.price}. Travel dates are from {fd.departure_date[0]} to {fd.return_date[0]}. "
+
+        if fd.num_flights_to == 2:
+            main += f"Outbound flight has {fd.num_flights_to-1} layover in {fd.route_to[1]}"
+        elif fd.num_flights_to > 2:
+            main += f"Outbound flight has {fd.num_flights_to-1} layovers in {', '.join(fd.route_to[1:-3])} and {fd.route_to[-2]}"
 
         self.message = f"{bluf}\n{main}"
 
