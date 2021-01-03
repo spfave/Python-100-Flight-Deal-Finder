@@ -58,22 +58,28 @@ class DataManager:
 
     def check_destination_prices(self):
         for destination in self.destinations:
-            flight = self.get_destination_flight(destination)
+            flight = self.find_flight(destination)
+
             if flight == None:
                 continue
-            flight_data = FlightData(flight)
 
+            flight_data = FlightData(flight)
             if flight_data.price <= destination["maxPrice"]:
                 flight_notification = NotificationManager(flight_data)
                 flight_notification.send_flight_price_email()
 
-    def get_destination_flight(self, destination):
+    def find_flight(self, destination):
         fq = FlightQuery(departure_loc=DEPARTURE_CITY,
                          arrival_loc=destination["iataCode"],
                          nights_min=7, nights_max=28,
                          max_stopovers=0,
                          currency="USD")
-        return self.flight_search.query_flight(fq.flight_params)
+        flight = self.flight_search.query_flight(fq.flight_params)
+        if flight == None:
+            fq.flight_params['max_stopovers'] = 1
+            flight = self.flight_search.query_flight(fq.flight_params)
+
+        return flight
 
 
 # Main

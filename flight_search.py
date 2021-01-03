@@ -46,7 +46,7 @@ class FlightSearch:
             flight = response.json()["data"][0]
         except IndexError:
             print(
-                f"No flights found for {flight_search_params['fly_to']} within cost limit")
+                f"No flights found to {flight_search_params['fly_to']}")
             return None
         else:
             print(
@@ -57,9 +57,9 @@ class FlightSearch:
 # Main
 if __name__ == "__main__":
     fs = FlightSearch()
-    fq = FlightQuery(DEPARTURE_CITY, "PAR",
+    fq = FlightQuery(DEPARTURE_CITY, "IST",
                      nights_min=7, nights_max=28,
-                     currency="USD", max_stopovers=0)
+                     currency="USD", max_stopovers=1)
     data = fs.query_flight(fq.flight_params)
     pprint(data)
     fd = FlightData(data)
