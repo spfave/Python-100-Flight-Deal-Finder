@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from flight_search import FlightSearch
 from flight_data import FlightQuery, FlightData
 from notification_manager import NotificationManager
+from pprint import pprint
 load_dotenv()
 
 
@@ -60,8 +61,11 @@ class DataManager:
             fq = FlightQuery(departure_loc=DEPARTURE_CITY,
                              arrival_loc=destination["iataCode"],
                              nights_min=7, nights_max=28,
+                             max_stopovers=0,
                              currency="USD")
             flight = self.flight_search.query_flight(fq.flight_params)
+            if flight == None:
+                continue
             flight_data = FlightData(flight)
 
             if flight_data.price <= destination["maxPrice"]:
@@ -73,6 +77,9 @@ class DataManager:
 if __name__ == "__main__":
     # pass
     dm = DataManager()
-    data = dm.get_destination_data()
+    pprint(dm.destinations)
 
-    print(data)
+    # dm.check_destination_codes()
+    # pprint(dm.destinations)
+
+    dm.check_destination_prices()

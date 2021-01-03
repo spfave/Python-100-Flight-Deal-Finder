@@ -42,15 +42,18 @@ class FlightSearch:
             url=kiwi_search, params=flight_search_params, headers=self.headers)
         response.raise_for_status()
 
-        return response.json()["data"][0]
+        try:
+            return response.json()["data"][0]
+        except IndexError:
+            return None
 
 
 # Main
 if __name__ == "__main__":
     fs = FlightSearch()
-    fq = FlightQuery(DEPARTURE_CITY, "PAR",
+    fq = FlightQuery(DEPARTURE_CITY, "DPS",
                      nights_min=7, nights_max=28,
-                     currency="USD", flight_type="round")
+                     currency="USD", max_stopovers=0)
     data = fs.query_flight(fq.flight_params)
     pprint(data)
     fd = FlightData(data)
