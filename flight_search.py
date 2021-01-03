@@ -43,8 +43,13 @@ class FlightSearch:
         response.raise_for_status()
 
         try:
-            return response.json()["data"][0]
+            flight = response.json()["data"][0]
+            print(
+                f"{flight_search_params['fly_to']} {flight['price']}")
+            return flight
         except IndexError:
+            print(
+                f"No flights found for {flight_search_params['fly_to']} within cost limit")
             return None
 
 

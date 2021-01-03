@@ -77,7 +77,7 @@ class DataManager:
 if __name__ == "__main__":
     # pass
     dm = DataManager()
-    pprint(dm.destinations)
+    # pprint(dm.destinations)
 
     # dm.check_destination_codes()
     # pprint(dm.destinations)
