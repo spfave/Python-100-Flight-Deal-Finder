@@ -8,7 +8,7 @@ load_dotenv()
 
 
 # Constants
-URL_FLIGHT_DATA = "https://api.sheety.co/e9eba1a41cbfb57732df73805f81e577/flightDeals/prices"
+URL_FLIGHT_DATA = os.getenv("URL_FLIGHT_DATA")
 DEPARTURE_CITY = "WAS"
 
 
