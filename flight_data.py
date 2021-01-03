@@ -54,6 +54,8 @@ class FlightQuery:
             self.flight_params["flight_type"] = kwargs.get("flight_type")
         if "one_per_date" in kwargs:
             self.flight_params["one_per_date"] = kwargs.get("one_per_date")
+        if "max_stopovers" in kwargs:
+            self.flight_params["max_stopovers"] = kwargs.get("max_stopovers")
 
 
 # Main
