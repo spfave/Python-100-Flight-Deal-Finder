@@ -53,7 +53,8 @@ class UserManager():
             url=URL_USERS_DATA, json=user_data, auth=AUTH_FLIGHT_DATA)
         response.raise_for_status()
 
-    def get_user_data(self):
+    @staticmethod
+    def get_user_data():
         response = requests.get(url=URL_USERS_DATA, auth=AUTH_FLIGHT_DATA)
         response.raise_for_status()
 
