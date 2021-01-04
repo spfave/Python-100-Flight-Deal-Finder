@@ -15,13 +15,20 @@ class NotificationManager:
 
     def send_flight_price_email(self, flight_data):
         message = self.generate_flight_price_alert_message(flight_data)
-        self.send_email(message)
+        self.send_email(message, os.getenv("TO_EMAIL"))
+
+    def send_flight_price_emails(self, flight_data):
+        message = self.generate_flight_price_alert_message(flight_data)
+
+        users = UserManager.get_user_data()
+        for user in users:
+            self.send_email(user["email"], message)
 
     def generate_flight_price_alert_message(self, flight_data: FlightData):
         fd = flight_data
 
         bluf = f"Low price flight alert for {fd.destination_city}!"
-        main = f"Fly to {fd.destination_city}-{fd.destination_airport} from {fd.departure_city}-{fd.departure_airport} for only ${fd.price}. Travel dates are from {fd.departure_date[0]} to {fd.return_date[0]}. "
+        main = f"Fly to {fd.destination_city}-{fd.destination_airport} from {fd.departure_city}-{fd.departure_airport} for only ${fd.price}. Travel dates are from {fd.departure_date} to {fd.return_date}. "
 
         if fd.num_flights_to == 2:
             main += f"Outbound flight has {fd.num_flights_to-1} layover in {fd.route_to[1]}"
@@ -33,7 +40,7 @@ class NotificationManager:
 
         return f"{bluf}\n{main}\n\n{flight_link}"
 
-    def send_email(self, message):
+    def send_email(self, user_email, message):
         (bluf, body) = message.split("\n", 1)
         email_msg = f"Subject: {bluf}\n\n{body}".encode("utf-8")
 
@@ -43,6 +50,6 @@ class NotificationManager:
                              password=os.getenv("EMAIL_PASSWORD"))
             connection.sendmail(
                 from_addr=os.getenv("MY_EMAIL"),
-                to_addrs=os.getenv("TO_EMAIL"),
+                to_addrs=user_email,
                 msg=email_msg
             )
