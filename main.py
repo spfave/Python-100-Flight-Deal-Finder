@@ -5,9 +5,9 @@ from pprint import pprint
 
 # Main
 flight_manager = DataManager()
+# pprint(flight_manager.destinations)
 
 flight_manager.check_destination_codes()
-# pprint(flight_manager.destinations)
 # pprint(flight_manager.destinations)
 
 flight_manager.check_destination_prices()

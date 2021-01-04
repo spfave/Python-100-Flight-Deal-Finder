@@ -21,9 +21,9 @@ class DataManager:
     def __init__(self):
         self.destinations = self.get_destination_data()
         self.flight_search = FlightSearch()
+        self.notification_manager = NotificationManager()
 
-    @staticmethod
-    def get_destination_data():
+    def get_destination_data(self):
         response = requests.get(url=URL_FLIGHT_DATA, auth=AUTH_FLIGHT_DATA)
         response.raise_for_status()
 
@@ -62,8 +62,7 @@ class DataManager:
 
             flight_data = FlightData(flight)
             if flight_data.price <= destination["maxPrice"]:
-                flight_notification = NotificationManager(flight_data)
-                flight_notification.send_flight_price_email()
+                self.notification_manager.send_flight_price_emails(flight_data)
 
     def find_flight(self, destination):
         fq = FlightQuery(departure_loc=DEPARTURE_CITY,
